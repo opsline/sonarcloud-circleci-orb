@@ -1,7 +1,6 @@
 version: 2.1
 orbs:
   orb-tools: circleci/orb-tools@8.27.4
-  sonarcloud: sonarsource/sonarcloud@dev:alpha
 jobs:
   test:
     parameters:
@@ -11,7 +10,6 @@ jobs:
       - image: <<parameters.image>>:latest
     steps:
       - checkout
-      - sonarcloud/scan
 workflows:
   publish-dev:
     jobs:
@@ -20,10 +18,6 @@ workflows:
           destination-orb-path: orb.yml
           workspace-path: orb.yml
           artifact-path: orb.yml
-      - orb-tools/publish-dev:
-          context: Publishing Orb
-          orb-name: sonarsource/sonarcloud
-          requires: [orb-tools/pack]
       - test:
           name: test-node
           image: node
@@ -36,7 +30,7 @@ workflows:
           requires: [orb-tools/publish-dev]
       - orb-tools/publish:
           context: Publishing Orb
-          orb-ref: sonarsource/sonarcloud@1.0.1
+          orb-ref: worldsurfleague/sonarcloud@1.0.2
           attach-workspace: true
           requires: [test-node, test-circleci-python]
           filters:
