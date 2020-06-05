@@ -4,6 +4,10 @@ parameters:
     description: the name of the environment variable where the SonarCloud API token is stored 
     default: SONAR_TOKEN
     type: env_var_name
+  sonar_host_url:
+    description: URL of the Sonar Scanner
+    default: https://sonarcloud.io
+    type: string
   cache_version:
     description: increment this value if the cache is corrupted and you want to start with a clean cache
     default: 1
@@ -36,7 +40,7 @@ steps:
 
         $SCANNER_DIRECTORY/sonar-scanner-$VERSION-$OS/bin/sonar-scanner
       environment:
-        SONARQUBE_SCANNER_PARAMS: '{"sonar.host.url":"https://sonarcloud.io"}'
+        SONARQUBE_SCANNER_PARAMS: '{"sonar.host.url":"<<parameter.sonar_host_url>>"}'
   - save_cache:
       key: v<<parameters.cache_version>>-sonarcloud-scanner-4.1.0.1829
       paths: /tmp/cache/scanner
